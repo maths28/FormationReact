@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import TodoItem from "./TodoItem.tsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const todos = [
+    { _id: "abcdef1234", title: "ABC", completed: false },
+    { _id: "dngudtub45", title: "DEF", completed: true },
+    { _id: "dfgfg35335", title: "XYZ", completed: false },
+  ];
+  const editingId = "dfgfg35335";
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <form className="todos-form">
+        <input type="checkbox" className="todos-toggle-checked" />
+        <input type="text" className="todos-new-input" />
+        <button>+</button>
+      </form>
+      <div className="todos-container">
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo._id}
+            todo={todo}
+            isEditing={editingId === todo._id}
+          />
+        ))}
       </div>
-      <h1>Vite + React !</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
