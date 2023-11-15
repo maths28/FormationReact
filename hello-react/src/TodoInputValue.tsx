@@ -5,5 +5,5 @@ export default function TodoInputValue({
 }: {
   value: string;
 }): ReactNode {
-  return <input className="todosInputValue" value={value} />;
+  return <input className="todosInputValue" defaultValue={value} />;
 }
