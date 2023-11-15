@@ -7,10 +7,14 @@ export default function TodoItem({
   todo,
   isEditing = false,
   handleTodoEdit,
+  onTodoDelete,
+  handleChangeEditingId,
 }: {
   todo: { _id: string; title: string; completed: boolean };
   isEditing?: boolean;
   handleTodoEdit: (todo: Todo) => void;
+  onTodoDelete: (deletedTodo: Todo) => void;
+  handleChangeEditingId: (id: string) => void;
 }): ReactNode {
   return (
     <div className="todosItem" data-todo-id={todo._id}>
@@ -22,9 +26,24 @@ export default function TodoItem({
           handleTodoEdit({ ...todo, completed: e.target.checked })
         }
       />
-      {isEditing && <TodoInputValue value={todo.title} />}
-      {!isEditing && <TodoSpanValue value={todo.title} />}
-      <button className="todosDeleteBtn">-</button>
+      {isEditing && (
+        <TodoInputValue
+          value={todo.title}
+          handleTodoEdit={(val: string) =>
+            handleTodoEdit({ ...todo, title: val })
+          }
+          handleChangeEditingId={handleChangeEditingId}
+        />
+      )}
+      {!isEditing && (
+        <TodoSpanValue
+          value={todo.title}
+          handleChangeEditingId={() => handleChangeEditingId(todo._id)}
+        />
+      )}
+      <button className="todosDeleteBtn" onClick={() => onTodoDelete(todo)}>
+        -
+      </button>
     </div>
   );
 }

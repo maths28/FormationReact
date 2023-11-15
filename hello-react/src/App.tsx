@@ -12,7 +12,7 @@ function App() {
 
   const [newTodo, setNewTodo] = useState("");
 
-  const editingId = "dfgfg35335";
+  const [editingId, setEditingId] = useState("dfgfg35335");
 
   function onChangeValueNewTodo(event: ChangeEvent<HTMLInputElement>): void {
     setNewTodo(event.target.value);
@@ -44,6 +44,14 @@ function App() {
     setTodos(newTodos);
   }
 
+  function handleTodoDelete(deletedTodo: Todo) {
+    setTodos(todos.filter((todo) => todo !== deletedTodo));
+  }
+
+  function handleChangeEditingId(id: string) {
+    setEditingId(id);
+  }
+
   return (
     <>
       <form className="todos-form" onSubmit={onSubmitForm}>
@@ -67,6 +75,8 @@ function App() {
             todo={todo}
             isEditing={editingId === todo._id}
             handleTodoEdit={handleTodoEdit}
+            onTodoDelete={handleTodoDelete}
+            handleChangeEditingId={handleChangeEditingId}
           />
         ))}
       </div>
