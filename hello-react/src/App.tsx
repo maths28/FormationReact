@@ -1,18 +1,43 @@
 import "./App.css";
 import TodoItem from "./TodoItem.tsx";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Todo } from "./Todo.ts";
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([
-    { _id: "abcdef1234", title: "ABC", completed: false },
-    { _id: "dngudtub45", title: "DEF", completed: true },
-    { _id: "dfgfg35335", title: "XYZ", completed: false },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const [newTodo, setNewTodo] = useState("");
 
   const [editingId, setEditingId] = useState("dfgfg35335");
+
+  async function fetchTodos(): Promise<Todo[]> {
+    const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+    const data = await res.json();
+    return data
+      .map((t: any) => ({
+        _id: String(t.id),
+        title: t.title,
+        completed: t.completed,
+      }))
+      .slice(0, 20);
+  }
+
+  useEffect(() => {
+    (async () => {
+      setTodos(await fetchTodos());
+    })();
+  }, []);
+
+  useEffect(() => {
+    function handleWindowClick(event: MouseEvent) {
+      const target: Element = event.target as Element;
+      if (target.className !== "todosInputValue") setEditingId("");
+    }
+    window.addEventListener("click", handleWindowClick);
+    return () => {
+      window.removeEventListener("click", handleWindowClick);
+    };
+  }, []);
 
   function onChangeValueNewTodo(event: ChangeEvent<HTMLInputElement>): void {
     setNewTodo(event.target.value);
